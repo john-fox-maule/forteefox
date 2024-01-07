@@ -1,5 +1,4 @@
-# ForteeFox
-
+# ForteeFox ![Continuous integration](https://github.com/john-fox-maule/forteefox/actions/workflows/ci-build.yml/badge.svg?event=push)
 ForteeFox is a PowerShell module for FortiManager currently it supports adding, cloning, retrieving, updating and removing firewall addresses of type ipmask and groups. For groups you can also add and remove members.
 
 ## Table of Contents
