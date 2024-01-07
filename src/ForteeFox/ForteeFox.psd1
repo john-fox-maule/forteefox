@@ -107,10 +107,10 @@ PrivateData = @{
         Tags = 'Automation','Firewall','FortiManager','PSEdition_Core','Windows'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/john-fox-maule/fortiautomate/blob/main/LICENSE'
+        LicenseUri = 'https://github.com/john-fox-maule/forteefox/blob/main/LICENSE'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/john-fox-maule/fortiautomate/'
+        ProjectUri = 'https://github.com/john-fox-maule/forteefox'
 
         # A URL to an icon representing this module.
         # IconUri = ''
