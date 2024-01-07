@@ -1,0 +1,51 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    outputs:
+      artifact: ${{ steps.build.outputs.artifact }}
+    
+    name: CI Build
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PowerShell module cache
+        id: cacher
+        uses: actions/cache@v3
+        with:
+          path: "~/.local/share/powershell/Modules"
+          key: ${{ runner.os }}-InvokeBuild-PlatyPS-PSScriptAnalyzer
+          
+      - name: Install required PowerShell modules
+        if: steps.cacher.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          Set-PSRepository PSGallery -InstallationPolicy Trusted
+          Install-Module InvokeBuild, PlatyPS, PSScriptAnalyzer -Scope CurrentUser -ErrorAction Stop
+
+      - name: Build PowerShell module
+        id: build
+        run: Invoke-Build -File ./ForteeFox.build.ps1 -Task Init, Clean, Build, Docs -ArtifactStagingDirectory ${{ runner.temp }}
+        shell: pwsh
+  
+      - name: Lint with PSScriptAnalyzer
+        run: |
+          Invoke-Build -Task Analyze -ArtifactStagingDirectory ${{ runner.temp }}
+        shell: pwsh
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: forteefox-${{ github.run_number }}
+          path: ${{ steps.build.outputs.artifact }}
+          retention-days: 3
